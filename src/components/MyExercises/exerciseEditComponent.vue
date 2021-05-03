@@ -6,7 +6,7 @@
       <i v-if="toAdd" class="fas fa-plus"></i>
     </button>
     <router-link :to="'/exercise/' + exercise.id"><img src="https://cdn.shortpixel.ai/client/q_glossy,ret_img/https://menspower.nl/wp-content/uploads/2018/02/crunch.gif" class="w-full h-full z-10"></router-link>
-    <h4 class="absolute text-2xl mb-2 mx-3 z-20">{{ exerciseName }}</h4>
+    <h4 class="absolute text-2xl mb-2 mx-3 z-20">{{ exercise.name}}</h4>
   </div>
 </template>
 
@@ -14,9 +14,7 @@
 export default {
   name: "exerciseEditComponent",
   props: {
-    exerciseName: {
-      type: String
-    },
+    exercise: {},
     toAdd: {
       type: Boolean
     }
@@ -24,9 +22,6 @@ export default {
   },
   data() {
     return {
-      exercise: {
-        id:1
-      }
     };
   },
   methods: {},

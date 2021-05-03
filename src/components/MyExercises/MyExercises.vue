@@ -10,6 +10,8 @@
 
 <script>
 import sectionExercises from "@/components/MyExercises/sectionExercises";
+// import api from "@/store/backend-api";
+
 
 export default {
   name: "MyExercises",
@@ -18,11 +20,13 @@ export default {
   },
   data() {
     return {
+      exercises: [],
       name: 'Arm exercises',
       secondName: 'Abs exercises'
     };
   },
   methods: {},
+
 };
 </script>
 

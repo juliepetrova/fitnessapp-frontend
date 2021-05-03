@@ -1,5 +1,4 @@
 <template>
-
   <div class="container" id="container"  v-bind:class="{ rightPanelActive: rightPanelActive }">
     <div class="form-container sign-up-container">
       <form action="#">
@@ -125,20 +124,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  background: #f6f5f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  margin: -20px 0 50px;
-}
 
 h1 {
   font-weight: bold;
@@ -220,9 +205,10 @@ input {
   0 10px 10px rgba(0,0,0,0.22);
   position: relative;
   overflow: hidden;
-  width: 768px;
+  width: 70%;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 500px;
+  margin: auto;
 }
 
 .form-container {

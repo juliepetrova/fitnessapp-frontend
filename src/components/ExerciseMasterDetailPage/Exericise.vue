@@ -31,25 +31,24 @@
                       d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
                       fill="#648299" fill-rule="nonzero"/>
                 </svg>
-                <select
+                <select  v-model="selected"
                     class="border border-gray-300 rounded-xl text-gray-600 h-10 pl-3 pr-8 bg-white hover:border-gray-400 focus:outline-none appearance-none">
-                  <option>Choose an area</option>
-                  <option>Abdomen</option>
-                  <option>Arms</option>
-                  <option>Legs</option>
-                  <option>Butt</option>
+                  <option disabled value="">Choose an area</option>
+                  <option v-for="option in options" v-bind:value="option.value" v-bind:key="option.value">
+                    {{ option.text }}
+                  </option>
                 </select>
               </div>
             </div>
 
             <div class="flex flex-row my-3">
               <h1 class="text-lg p-2">Repetitions: </h1>
-              <input placeholder="3" value="3"
+              <input placeholder="3" :value=exercise.repetitions
                      class="w-1/6 text-center border border-gray-300 rounded-xl text-gray-600 h-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
             </div>
             <div class="flex flex-row">
               <h1 class="text-lg p-2">Duration:</h1>
-              <input placeholder="40" value="40"
+              <input placeholder="40" :value=exercise.duration
                      class="w-1/6 text-center border border-gray-300 rounded-xl text-gray-600 h-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
               <h1 class="text-lg p-2">sek</h1>
             </div>
@@ -59,6 +58,7 @@
             <h1 class="text-xl text-red-600 font-bold pb-4">Additional information/ Steps:</h1>
             <div class="flex flex-row">
               <ol class="list-decimal px-3">
+                <li>{{exercise.additional_info}}</li>
                 <li>Lay down</li>
                 <li>Do a crunch</li>
                 <li>Lay back as slowly as possible</li>
@@ -74,21 +74,34 @@
 </template>
 
 <script>
+import api from "@/store/backend-api";
+
 export default {
   name: "Exercise",
   components: {},
   data() {
     return {
-      exercise: {
-        name: "Crunch",
-        img: "",
-        repetitions: 2,
-        duration: 0.30,
-        area: 'Abdomen'
-      }
+      exercise: {},
+      selected: '',
+      options: [
+        { text: 'Abdomen', value: '1' },
+        { text: 'Arms', value: '2' },
+        { text: 'Legs', value: '3' },
+        { text: 'Butt', value: '4' }
+      ]
     };
   },
   methods: {},
+
+  // Get exercise with id from the route
+  created() {
+    api.getExercise(this.$route.params.id)
+        .then(res => {
+          this.exercise = res.data
+          this.selected = res.data.category_id
+        })
+        .catch(err => console.log(err));
+  }
 };
 </script>
 
