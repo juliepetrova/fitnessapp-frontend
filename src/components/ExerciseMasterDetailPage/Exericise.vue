@@ -13,6 +13,14 @@
               class="w-5/6 text-white text-center text-lg bg-gradient-to-r from-yellow-400 to-red-700 rounded-full mt-2 p-2 focus:outline-none">
             Upload picture/video
           </button>
+          <button v-on:click="editExercise" v-bind:class="{ hidden: !isHidden }"
+              class="w-5/6 text-white text-center text-lg bg-gradient-to-r from-yellow-400 to-green-500 rounded-full mt-2 p-2 focus:outline-none">
+            Edit exercise
+          </button>
+          <button v-on:click="saveExercise" v-bind:class="{ hidden: isHidden }"
+                  class="w-5/6 text-white text-center text-lg bg-gradient-to-r from-green-400 to-green-500 rounded-full mt-2 p-2 focus:outline-none">
+            Save exercise
+          </button>
         </div>
       </div>
 
@@ -20,7 +28,9 @@
       <div class="w-3/4 flex-initial">
         <div class="flex flex-col">
           <div class="w-3/4 p-5 lg:p-10 shadow-md shadow lg:h-72 rounded-xl flex flex-col ">
-            <h1 class="text-2xl text-red-800 font-bold pb-4">{{ exercise.name }}</h1>
+            <h1 class="text-2xl text-red-800 font-bold pb-4" v-bind:class="{ hidden: !isHidden }">{{ exercise.name }}</h1>
+            <input placeholder="Enter your name" v-model="exercise.name" v-bind:class="{ hidden: isHidden }"
+                   class="m-2 w-1/3 px-3 border border-gray-300 rounded-xl text-gray-600 h-10 bg-white hover:border-gray-400 focus:outline-none appearance-none text-2xl text-red-800 font-bold">
             <div class="flex flex-row">
               <h3 class="text-lg p-2"> Area: </h3>
 
@@ -31,7 +41,7 @@
                       d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
                       fill="#648299" fill-rule="nonzero"/>
                 </svg>
-                <select  v-model="selected"
+                <select  v-model="selected"  :disabled="isHidden"
                     class="border border-gray-300 rounded-xl text-gray-600 h-10 pl-3 pr-8 bg-white hover:border-gray-400 focus:outline-none appearance-none">
                   <option disabled value="">Choose an area</option>
                   <option v-for="option in options" v-bind:value="option.value" v-bind:key="option.value">
@@ -43,12 +53,12 @@
 
             <div class="flex flex-row my-3">
               <h1 class="text-lg p-2">Repetitions: </h1>
-              <input placeholder="3" :value=exercise.repetitions
+              <input placeholder="3" v-model="exercise.repetitions" :disabled="isHidden"
                      class="w-1/6 text-center border border-gray-300 rounded-xl text-gray-600 h-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
             </div>
             <div class="flex flex-row">
               <h1 class="text-lg p-2">Duration:</h1>
-              <input placeholder="40" :value=exercise.duration
+              <input placeholder="40" v-model="exercise.duration" :disabled="isHidden"
                      class="w-1/6 text-center border border-gray-300 rounded-xl text-gray-600 h-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
               <h1 class="text-lg p-2">sek</h1>
             </div>
@@ -81,17 +91,47 @@ export default {
   components: {},
   data() {
     return {
-      exercise: {},
+      exercise: {
+        id: 0,
+        name: '',
+        repetitions: 0,
+        category_id: 0,
+        duration: 0,
+        additional_info: '',
+        suggested: 0,
+        image: '',
+        user_id: 1,
+      },
       selected: '',
       options: [
         { text: 'Abdomen', value: '1' },
         { text: 'Arms', value: '2' },
         { text: 'Legs', value: '3' },
         { text: 'Butt', value: '4' }
-      ]
+      ],
+      isHidden: true,
     };
   },
-  methods: {},
+  methods: {
+    editExercise(){
+      this.isHidden = !this.isHidden
+    },
+    saveExercise() {
+
+      // this.form.user_id = localStorage.getItem('user')
+      // console.log(localStorage.getItem('user').id)
+      this.exercise.category_id = this.selected
+      let resp = JSON.stringify(this.exercise);
+      api.updateExercise(resp, this.exercise.id)
+          .then(res => {
+            console.log(res.data)
+            this.isHidden = true;
+          })
+          .catch(err => console.log(err));
+
+    },
+
+  },
 
   // Get exercise with id from the route
   created() {

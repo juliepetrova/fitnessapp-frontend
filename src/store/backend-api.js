@@ -30,5 +30,19 @@ export default {
   },
   saveExercise(form) {
     return AXIOS.post("exercises", form);
+  },
+  updateExercise(form, id) {
+    return AXIOS.put("exercises/" + id, form);
+  },
+
+  //  Categories
+  getCategories() {
+    return AXIOS.get("categories");
+  },
+  saveCategory(form) {
+    return AXIOS.post("categories", form);
+  },
+  deleteCategory(id) {
+    return AXIOS.delete("categories/" + id);
   }
 };

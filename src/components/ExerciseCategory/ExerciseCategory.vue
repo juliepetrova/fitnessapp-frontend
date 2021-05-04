@@ -157,6 +157,7 @@ export default {
 
       // this.form.user_id = localStorage.getItem('user')
       console.log(localStorage.getItem('user'))
+      this.formExercise.category_id = this.selected
       let resp = JSON.stringify(this.formExercise);
       api.saveExercise(resp)
           .then(res => {
